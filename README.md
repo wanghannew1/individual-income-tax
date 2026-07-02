@@ -41,7 +41,7 @@ uv pip install -r requirements.txt --index-url https://pypi.tuna.tsinghua.edu.cn
 pytest tests/ -v
 
 # 5. 启动服务
-python3 -m web.app
+python -m web.app
 
 # 6. 打开浏览器
 # http://localhost:8000
