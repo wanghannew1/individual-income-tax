@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>计算结果 - 个税累计预扣计算器</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>计算结果</h1>
+        </header>
+
+        <div class="summary-cards">
+            <div class="card">
+                <div class="card-label">全年总收入</div>
+                <div class="card-value">{{ "%.2f"|format(summary.total_income) }} 元</div>
+            </div>
+            <div class="card">
+                <div class="card-label">全年缴税合计</div>
+                <div class="card-value tax">{{ "%.2f"|format(summary.total_tax) }} 元</div>
+            </div>
+            <div class="card">
+                <div class="card-label">全年税后收入</div>
+                <div class="card-value after-tax">{{ "%.2f"|format(summary.total_after_tax) }} 元</div>
+            </div>
+            <div class="card">
+                <div class="card-label">实际税负率</div>
+                <div class="card-value rate">{{ "%.2f"|format(summary.effective_tax_rate * 100) }}%</div>
+            </div>
+        </div>
+
+        {% if summary.rate_jumps %}
+        <div class="rate-jumps">
+            <strong>税率跳档提示：</strong>
+            {% for jump in summary.rate_jumps %}
+            <span class="jump-badge">{{ jump.month }}月: {{ "%.0f"|format(jump.from_rate * 100) }}% → {{ "%.0f"|format(jump.to_rate * 100) }}%</span>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        <h2>累计预扣法 — 逐月明细</h2>
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th>月份</th>
+                        <th>工资收入</th>
+                        <th>累计应纳税<br>所得额</th>
+                        <th>税率</th>
+                        <th>速算扣除数</th>
+                        <th>累计应缴</th>
+                        <th>本期应缴</th>
+                        <th>税后收入</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% set prev_rate = 0 %}
+                    {% for r in results %}
+                    {% set is_jump = r.tax_rate > prev_rate %}
+                    {% set prev_rate = r.tax_rate %}
+                    <tr class="{% if is_jump and r.month > 1 %}rate-jump-row{% endif %}">
+                        <td>{{ r.month }}月</td>
+                        <td>{{ "%.2f"|format(r.salary) }}</td>
+                        <td>{{ "%.2f"|format(r.cumulative_taxable_income) }}</td>
+                        <td>{% if r.tax_rate > 0 %}{{ "%.0f"|format(r.tax_rate * 100) }}%{% else %}0%{% endif %}</td>
+                        <td>{{ "%.0f"|format(r.quick_deduction) }}</td>
+                        <td>{{ "%.2f"|format(r.cumulative_tax) }}</td>
+                        <td class="tax-amount">{{ "%.2f"|format(r.monthly_tax) }}</td>
+                        <td>{{ "%.2f"|format(r.after_tax_income) }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        {% if comparison and old_results %}
+        <h2>旧按月计算法 — 对比参考</h2>
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th>月份</th>
+                        <th>工资收入</th>
+                        <th>应纳税所得额</th>
+                        <th>税率</th>
+                        <th>速算扣除数</th>
+                        <th>应缴税额</th>
+                        <th>税后收入</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for r in old_results %}
+                    <tr>
+                        <td>{{ r.month }}月</td>
+                        <td>{{ "%.2f"|format(r.salary) }}</td>
+                        <td>{{ "%.2f"|format(r.taxable_income) }}</td>
+                        <td>{{ "%.0f"|format(r.tax_rate * 100) }}%</td>
+                        <td>{{ "%.0f"|format(r.quick_deduction) }}</td>
+                        <td class="tax-amount">{{ "%.2f"|format(r.monthly_tax) }}</td>
+                        <td>{{ "%.2f"|format(r.after_tax_income) }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <div class="old-summary">
+                <strong>旧方法全年合计税额：</strong>
+                <span class="tax-amount">{{ "%.2f"|format(old_results|sum(attribute='monthly_tax')) }} 元</span>
+                &nbsp;&nbsp;|&nbsp;&nbsp;
+                <strong>累计预扣法全年合计税额：</strong>
+                <span class="tax-amount">{{ "%.2f"|format(summary.total_tax) }} 元</span>
+            </div>
+        </div>
+        {% endif %}
+
+        <div class="actions">
+            <a href="/" class="btn btn-primary">&larr; 返回修改</a>
+        </div>
+    </div>
+</body>
+</html>

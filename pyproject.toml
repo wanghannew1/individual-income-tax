@@ -1,0 +1,13 @@
+[project]
+name = "individual-income-tax"
+version = "1.0.0"
+description = "中国个税累计预扣计算工具"
+requires-python = ">=3.10"
+
+[build-system]
+requires = ["setuptools>=64.0"]
+build-backend = "setuptools.backends._legacy:_Backend"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
