@@ -29,16 +29,21 @@
 git clone https://github.com/wanghannew1/individual-income-tax.git
 cd individual-income-tax
 
-# 2. 安装依赖
-pip install -r requirements.txt
+# 2. 创建并激活虚拟环境（使用 uv，推荐）
+uv venv
+source .venv/bin/activate      # Linux/macOS
+# .venv\Scripts\activate      # Windows
 
-# 3. 运行测试（可选）
+# 3. 安装依赖（使用清华镜像加速）
+uv pip install -r requirements.txt --index-url https://pypi.tuna.tsinghua.edu.cn/simple
+
+# 4. 运行测试（可选）
 pytest tests/ -v
 
-# 4. 启动服务
+# 5. 启动服务
 python3 -m web.app
 
-# 5. 打开浏览器
+# 6. 打开浏览器
 # http://localhost:8000
 ```
 
