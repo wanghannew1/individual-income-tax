@@ -1,13 +1,26 @@
-[project]
-name = "individual-income-tax"
-version = "1.0.0"
-description = "中国个税累计预扣计算工具"
-requires-python = ">=3.10"
-
 [build-system]
-requires = ["setuptools>=64.0"]
-build-backend = "setuptools.backends._legacy:_Backend"
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "tax-declaration-tool"
+version = "0.1.0"
+description = "人力资源劳务派遣公司个税申报数据整理工具"
+requires-python = ">=3.10"
+dependencies = [
+    "fastapi>=0.115.0",
+    "uvicorn>=0.32.0",
+    "jinja2>=3.1.0",
+    "sqlmodel>=0.0.24",
+    "pydantic>=2.0.0",
+    "pandas>=2.0.0",
+    "openpyxl>=3.1.0",
+    "xlrd>=2.0.0",
+    "python-multipart>=0.0.9",
+    "pytest>=8.0.0",
+    "httpx>=0.28.0",
+]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
-python_files = ["test_*.py"]
+pythonpath = ["."]
