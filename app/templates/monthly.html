@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block title %}月度申报 - 个税申报数据整理工具{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1>月度申报</h1>
+    <p class="subtitle">上传工资表，生成当月申报数据</p>
+</div>
+
+<div class="card">
+    <h3>步骤 1：选择申报月份并上传工资表</h3>
+    <form method="post" action="/monthly/upload" enctype="multipart/form-data" class="upload-form">
+        <div class="form-row">
+            <label>申报月份
+                <input type="month" name="year_month" value="2026-06" required>
+            </label>
+            <label>工资表文件（可多选）
+                <input type="file" name="files" accept=".xls,.xlsx" multiple required>
+            </label>
+            <button type="submit" class="btn btn-primary">上传并解析</button>
+        </div>
+    </form>
+</div>
+
+<div class="card">
+    <h3>申报结果预览</h3>
+    <p class="text-muted">请先上传工资表</p>
+</div>
+{% endblock %}

@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block title %}仪表盘 - 个税申报数据整理工具{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1>仪表盘</h1>
+    <p class="subtitle">整理各甲方单位工资表，生成个税系统导入数据</p>
+</div>
+
+<div class="card-grid">
+    <a href="/employees" class="card">
+        <h3>员工库</h3>
+        <p>导入税局人员信息表，管理员工状态和银行信息</p>
+    </a>
+    <a href="/monthly" class="card">
+        <h3>月度申报</h3>
+        <p>上传工资表，生成当月申报数据和导出文件</p>
+    </a>
+    <a href="/history" class="card">
+        <h3>历史记录</h3>
+        <p>查看历史月份申报记录，重新导出</p>
+    </a>
+</div>
+
+<div class="info-section">
+    <h2>使用流程</h2>
+    <ol>
+        <li><strong>导入员工库</strong>：从自然人电子税务局扣缴端导出人员信息，上传导入</li>
+        <li><strong>月度申报</strong>：选择月份，上传各甲方单位工资表</li>
+        <li><strong>确认零申报</strong>：系统自动带出在岗但无工资员工，可取消勾选</li>
+        <li><strong>导出申报表</strong>：下载综合所得申报表、人员信息采集表、单位汇总表</li>
+        <li><strong>上传个税系统</strong>：将 Excel 导入自然人电子税务局扣缴端</li>
+    </ol>
+</div>
+{% endblock %}

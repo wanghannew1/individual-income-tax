@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+
+{% block title %}员工库 - 个税申报数据整理工具{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1>员工库</h1>
+    <p class="subtitle">管理派遣员工信息，员工状态影响零申报自动带出</p>
+</div>
+
+<div class="toolbar">
+    <form method="get" action="/employees" class="search-form">
+        <input type="text" name="q" value="{{ q or '' }}" placeholder="搜索姓名或身份证号">
+        <button type="submit">搜索</button>
+    </form>
+    <a href="/monthly" class="btn btn-primary">导入人员信息表</a>
+</div>
+
+<table class="data-table">
+    <thead>
+        <tr>
+            <th>姓名</th>
+            <th>身份证号</th>
+            <th>工号</th>
+            <th>状态</th>
+            <th>最近一次单位</th>
+            <th>最近一次发薪月</th>
+            <th>手机号</th>
+            <th>操作</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for emp in employees %}
+        <tr>
+            <td>{{ emp.name }}</td>
+            <td>{{ emp.id_card }}</td>
+            <td>{{ emp.employee_no or '' }}</td>
+            <td>
+                <span class="status-badge status-{{ emp.status }}">{{ emp.status }}</span>
+            </td>
+            <td>{{ emp.latest_unit or '' }}</td>
+            <td>{{ emp.latest_pay_month or '' }}</td>
+            <td>{{ emp.phone or '' }}</td>
+            <td>
+                <button class="btn btn-small" onclick="toggleEdit({{ emp.id }})">编辑</button>
+            </td>
+        </tr>
+        <tr id="edit-row-{{ emp.id }}" class="edit-row" style="display: none;">
+            <td colspan="8">
+                <form method="post" action="/employees/{{ emp.id }}/update" class="edit-form">
+                    <div class="form-row">
+                        <label>状态
+                            <select name="status">
+                                <option value="在岗" {% if emp.status == '在岗' %}selected{% endif %}>在岗</option>
+                                <option value="离职" {% if emp.status == '离职' %}selected{% endif %}>离职</option>
+                                <option value="新增待确认" {% if emp.status == '新增待确认' %}selected{% endif %}>新增待确认</option>
+                            </select>
+                        </label>
+                        <label>手机号
+                            <input type="text" name="phone" value="{{ emp.phone or '' }}">
+                        </label>
+                        <label>开户银行
+                            <input type="text" name="bank_name" value="{{ emp.bank_name or '' }}">
+                        </label>
+                        <label>银行账号
+                            <input type="text" name="bank_account" value="{{ emp.bank_account or '' }}">
+                        </label>
+                        <label>备注
+                            <input type="text" name="memo" value="{{ emp.memo or '' }}">
+                        </label>
+                        <button type="submit" class="btn btn-primary">保存</button>
+                    </div>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<script>
+function toggleEdit(id) {
+    const row = document.getElementById('edit-row-' + id);
+    row.style.display = row.style.display === 'none' ? 'table-row' : 'none';
+}
+</script>
+{% endblock %}

@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}个税申报数据整理工具{% endblock %}</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-brand">个税申报数据整理工具</div>
+        <ul class="nav-links">
+            <li><a href="/">仪表盘</a></li>
+            <li><a href="/employees">员工库</a></li>
+            <li><a href="/monthly">月度申报</a></li>
+            <li><a href="/history">历史记录</a></li>
+        </ul>
+    </nav>
+    <main class="container">
+        {% block content %}{% endblock %}
+    </main>
+    <footer class="footer">
+        <p>人力资源劳务派遣公司个税申报数据整理工具</p>
+    </footer>
+</body>
+</html>
