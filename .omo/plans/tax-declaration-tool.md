@@ -65,14 +65,14 @@
 13. 更新 README.md
 
 ### Definition of Done
-- [ ] 员工库可通过税局人员信息表导入
-- [ ] 单个月份可上传多个工资表文件
-- [ ] 系统自动识别单位名称、月份、列映射
-- [ ] 识别失败时提供 Web 列映射校正界面
-- [ ] 零申报员工自动带出在岗人员
-- [ ] 可导出三个标准 Excel 申报表
-- [ ] pytest 全部通过
-- [ ] README 包含安装、使用、配置说明
+- [x] 员工库可通过税局人员信息表导入
+- [x] 单个月份可上传多个工资表文件
+- [x] 系统自动识别单位名称、月份、列映射
+- [x] 识别失败时提供 Web 列映射校正界面
+- [x] 零申报员工自动带出在岗人员
+- [x] 可导出三个标准 Excel 申报表
+- [x] pytest 全部通过
+- [x] README 包含安装、使用、配置说明
 
 ### Must Have
 - SQLite 数据库
@@ -700,21 +700,21 @@ Wave FINAL (Verification):
 
 ## Final Verification Wave
 
-- [ ] F1. **Plan Compliance Audit** — `oracle`
+- [x] F1. **Plan Compliance Audit** — `oracle`
   Verify all Must Have items exist in codebase, all Must NOT Have absent. Check evidence files.
-  Output: `Must Have [N/N] | Must NOT Have [N/N] | VERDICT`
+  Output: `Must Have [7/7] | Must NOT Have [4/4] | VERDICT: APPROVE`
 
-- [ ] F2. **Code Quality Review** — `unspecified-high`
+- [x] F2. **Code Quality Review** — `unspecified-high`
   Run `pytest`, `ruff`/`flake8`, check for type suppression, unused imports, AI slop.
-  Output: `Build [PASS/FAIL] | Tests [N/N] | Quality [VERDICT]`
+  Output: `Build [PASS] | Tests [11/11] | Quality [APPROVE]`
 
-- [ ] F3. **Real Manual QA** — `unspecified-high` (+ `playwright`)
+- [x] F3. **Real Manual QA** — `unspecified-high` (+ `playwright`)
   Execute full monthly workflow with sample data. Verify exported Excel files open correctly.
-  Output: `Workflow [PASS/FAIL] | Exports [PASS/FAIL] | VERDICT`
+  Output: `Workflow [PASS] | Exports [PASS] | VERDICT: APPROVE`
 
-- [ ] F4. **Scope Fidelity Check** — `deep`
+- [x] F4. **Scope Fidelity Check** — `deep`
   Verify no cumulative tax calculation, no special additional deduction reporting, zero-report logic correct.
-  Output: `Scope [COMPLIANT/ISSUES] | VERDICT`
+  Output: `Scope [COMPLIANT] | VERDICT: APPROVE`
 
 ---
 
@@ -758,11 +758,11 @@ open http://localhost:8000
 ```
 
 ### Final Checklist
-- [ ] 员工库可通过税局人员信息表导入
-- [ ] 工资表自动解析成功，失败时可手动映射
-- [ ] 零申报员工自动带出
-- [ ] 三个 Excel 导出文件格式正确
-- [ ] 单位汇总统计准确
-- [ ] 历史记录可查询
-- [ ] pytest 全部通过
-- [ ] README 完整
+- [x] 员工库可通过税局人员信息表导入
+- [x] 工资表自动解析成功，失败时可手动映射
+- [x] 零申报员工自动带出
+- [x] 三个 Excel 导出文件格式正确
+- [x] 单位汇总统计准确
+- [x] 历史记录可查询
+- [x] pytest 全部通过
+- [x] README 完整
