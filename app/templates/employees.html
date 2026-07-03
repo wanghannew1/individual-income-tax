@@ -13,8 +13,17 @@
         <input type="text" name="q" value="{{ q or '' }}" placeholder="搜索姓名或身份证号">
         <button type="submit">搜索</button>
     </form>
-    <a href="/monthly" class="btn btn-primary">导入人员信息表</a>
+    <form method="post" action="/employees/import" enctype="multipart/form-data" class="import-form">
+        <input type="file" name="file" accept=".xls,.xlsx" required>
+        <button type="submit" class="btn btn-primary">导入人员信息表</button>
+    </form>
 </div>
+
+{% if import_result %}
+<div class="alert alert-success">
+    导入完成：新增 {{ import_result.created }} 人，更新 {{ import_result.updated }} 人，跳过 {{ import_result.skipped }} 人。
+</div>
+{% endif %}
 
 <table class="data-table">
     <thead>

@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Request, Depends, Form, Query
+from fastapi import APIRouter, Request, Depends, Form, Query, File, UploadFile
 from fastapi.responses import RedirectResponse
 from fastapi.templating import Jinja2Templates
 from pathlib import Path
@@ -6,6 +6,7 @@ from sqlmodel import Session, select
 
 from db.database import get_session
 from db.models import Employee
+from services.personnel_import import import_personnel_file
 
 router = APIRouter()
 templates = Jinja2Templates(directory=Path(__file__).resolve().parent.parent / "templates")
@@ -27,6 +28,25 @@ def list_employees(
         request,
         "employees.html",
         {"employees": employees, "q": q},
+    )
+
+
+@router.post("/import")
+def import_personnel(
+    request: Request,
+    file: UploadFile = File(...),
+    session: Session = Depends(get_session),
+):
+    upload_dir = Path(__file__).resolve().parent.parent.parent / "uploads"
+    upload_dir.mkdir(exist_ok=True)
+    file_path = upload_dir / file.filename
+    with open(file_path, "wb") as f:
+        f.write(file.file.read())
+    result = import_personnel_file(str(file_path), session)
+    return templates.TemplateResponse(
+        request,
+        "employees.html",
+        {"employees": session.exec(select(Employee).order_by(Employee.name)).all(), "import_result": result},
     )
 
 
