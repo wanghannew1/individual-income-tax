@@ -140,7 +140,7 @@ Wave FINAL (Verification):
 
 ## TODOs
 
-- [ ] 1. 项目脚手架 + SQLite 数据库初始化
+- [x] 1. 项目脚手架 + SQLite 数据库初始化
 
   **What to do**:
   - 新建项目结构，清空原代码
@@ -180,7 +180,7 @@ Wave FINAL (Verification):
   **Commit**: YES
   - Message: `chore: scaffold new project and SQLite database`
 
-- [ ] 2. SQLModel 数据模型定义
+- [x] 2. SQLModel 数据模型定义
 
   **What to do**:
   - 定义 `Employee` 模型：id_card, name, employee_no, status, hire_date, leave_date, latest_unit, latest_pay_month, phone, bank_name, bank_account, memo
@@ -218,7 +218,7 @@ Wave FINAL (Verification):
   **Commit**: YES
   - Message: `feat: define SQLModel entities`
 
-- [ ] 3. 基础 Web 框架和页面布局
+- [x] 3. 基础 Web 框架和页面布局
 
   **What to do**:
   - 创建 FastAPI 主应用 `app/main.py`
@@ -258,7 +258,7 @@ Wave FINAL (Verification):
   **Commit**: YES
   - Message: `feat: setup FastAPI app and base templates`
 
-- [ ] 4. 税局人员信息表导入功能
+- [x] 4. 税局人员信息表导入功能
 
   **What to do**:
   - 实现 `services/personnel_import.py`
@@ -298,7 +298,7 @@ Wave FINAL (Verification):
   **Commit**: YES
   - Message: `feat: import tax bureau personnel info`
 
-- [ ] 5. 工资表解析器（东北师范大学格式 + 通用自动识别）
+- [x] 5. 工资表解析器（东北师范大学格式 + 通用自动识别）
 
   **What to do**:
   - 实现 `services/payroll_parser.py`
@@ -337,7 +337,7 @@ Wave FINAL (Verification):
   **Commit**: YES
   - Message: `feat: add payroll parser with auto header detection`
 
-- [ ] 6. 列映射配置持久化
+- [x] 6. 列映射配置持久化
 
   **What to do**:
   - 实现 `services/parser_config.py`
@@ -377,7 +377,7 @@ Wave FINAL (Verification):
   **Commit**: YES
   - Message: `feat: manual column mapping and config persistence`
 
-- [ ] 7. 月度申报记录生成（含零申报自动带出）
+- [x] 7. 月度申报记录生成（含零申报自动带出）
 
   **What to do**:
   - 实现 `services/monthly_record.py`
@@ -423,7 +423,7 @@ Wave FINAL (Verification):
   **Commit**: YES
   - Message: `feat: generate monthly records with zero-report auto-fill`
 
-- [ ] 8. 员工库 Web 管理页面
+- [x] 8. 员工库 Web 管理页面
 
   **What to do**:
   - 创建 `/employees` 页面
@@ -464,7 +464,7 @@ Wave FINAL (Verification):
   **Commit**: YES
   - Message: `feat: employee management web UI`
 
-- [ ] 9. 综合所得申报表 Excel 导出
+- [x] 9. 综合所得申报表 Excel 导出
 
   **What to do**:
   - 实现 `services/export_tax_report.py`
@@ -503,7 +503,7 @@ Wave FINAL (Verification):
   **Commit**: YES
   - Message: `feat: export comprehensive income declaration table`
 
-- [ ] 10. 人员信息采集表 Excel 导出
+- [x] 10. 人员信息采集表 Excel 导出
 
   **What to do**:
   - 实现 `services/export_personnel.py`
@@ -540,7 +540,7 @@ Wave FINAL (Verification):
   **Commit**: YES
   - Message: `feat: export personnel information collection table`
 
-- [ ] 11. 甲方单位汇总表 Excel 导出
+- [x] 11. 甲方单位汇总表 Excel 导出
 
   **What to do**:
   - 实现 `services/export_unit_summary.py`
@@ -577,7 +577,7 @@ Wave FINAL (Verification):
   **Commit**: YES
   - Message: `feat: export unit summary table`
 
-- [ ] 12. 月度申报流程页面
+- [x] 12. 月度申报流程页面
 
   **What to do**:
   - 创建 `/monthly` 页面
@@ -620,7 +620,7 @@ Wave FINAL (Verification):
   **Commit**: YES
   - Message: `feat: monthly declaration workflow page`
 
-- [ ] 13. 历史记录查询页面
+- [x] 13. 历史记录查询页面
 
   **What to do**:
   - 创建 `/history` 页面
@@ -659,7 +659,7 @@ Wave FINAL (Verification):
   **Commit**: YES
   - Message: `feat: history records page`
 
-- [ ] 14. 测试覆盖 + README
+- [x] 14. 测试覆盖 + README
 
   **What to do**:
   - 编写 pytest 测试：模型、导入、解析、月度记录生成、导出
