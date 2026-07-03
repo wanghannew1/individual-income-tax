@@ -1,0 +1,183 @@
+{% extends "base.html" %}
+
+{% block title %}申报预览 - {{ year_month }} - 个税申报数据整理工具{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1>{{ year_month }} 申报数据</h1>
+    <a href="/monthly" class="btn btn-secondary">返回上传</a>
+</div>
+
+{% if error %}
+<div class="alert alert-error">{{ error }}</div>
+{% endif %}
+
+{% if not generated %}
+<!-- Parse Results -->
+{% for pr in parse_results %}
+<div class="card">
+    <h3>{{ pr.unit }}</h3>
+    {% if pr.needs_mapping or pr.confidence < 1.0 %}
+    <div class="alert alert-warning">
+        自动识别置信度不足，需要手动指定列映射。
+    </div>
+    <div class="mapping-form">
+        <h4>列映射（第 {{ pr.detected_columns.header_row + 1 }} 行为表头）</div>
+        <div class="form-row">
+            <label>姓名列
+                <input type="text" name="name_col" value="{{ pr.detected_columns.name_col }}" data-row="{{ pr.detected_columns.header_row }}" readonly>
+            </label>
+            <label>身份证列
+                <input type="text" name="id_card_col" value="{{ pr.detected_columns.id_card_col }}" data-row="{{ pr.detected_columns.header_row }}" readonly>
+            </label>
+            <label>收入列
+                <input type="text" name="income_col" value="{{ pr.detected_columns.income_col }}" data-row="{{ pr.detected_columns.header_row }}" readonly>
+            </label>
+        </div>
+        <p class="text-muted">列名：{% for h in pr.headers %}{{ h }}{% if not loop.last %} | {% endif %}{% endfor %}</p>
+    </div>
+    {% else %}
+    <div class="alert alert-success">自动识别成功（置信度 {{ (pr.confidence * 100)|int }}%）</div>
+    {% endif %}
+
+    {% if pr.records %}
+    <p>解析到 <strong>{{ pr.records|length }}</strong> 条记录：</p>
+    <div class="table-responsive">
+        <table>
+            <thead>
+                <tr>
+                    <th>序号</th>
+                    <th>姓名</th>
+                    <th>身份证号</th>
+                    <th>收入</th>
+                    <th>养老</th>
+                    <th>失业</th>
+                    <th>医疗</th>
+                    <th>公积金</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for r in pr.records[:20] %}
+                <tr>
+                    <td>{{ loop.index }}</td>
+                    <td>{{ r.name }}</td>
+                    <td>{{ r.id_card[:6] }}****{{ r.id_card[-4:] }}</td>
+                    <td>{{ "%.2f"|format(r.income) }}</td>
+                    <td>{{ "%.2f"|format(r.pension) }}</td>
+                    <td>{{ "%.2f"|format(r.unemployment) }}</td>
+                    <td>{{ "%.2f"|format(r.medical) }}</td>
+                    <td>{{ "%.2f"|format(r.housing_fund) }}</td>
+                </tr>
+                {% endfor %}
+                {% if pr.records|length > 20 %}
+                <tr><td colspan="8" class="text-muted">... 还有 {{ pr.records|length - 20 }} 条记录</td></tr>
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div class="alert alert-error">未能解析出任何记录</div>
+    {% endif %}
+
+    {% if pr.errors %}
+    <div class="alert alert-error">
+        <strong>解析问题：</strong>
+        {% for err in pr.errors %}<br>- {{ err }}{% endfor %}
+    </div>
+    {% endif %}
+</div>
+{% endfor %}
+
+<!-- Generate Form -->
+<form method="post" action="/monthly/generate">
+    <input type="hidden" name="year_month" value="{{ year_month }}">
+    <div class="card">
+        <h3>步骤 2：生成申报数据</h3>
+        <p>确认上述解析结果无误后，点击生成：</p>
+        <ul>
+            <li>有收入的员工将按实际工资数据生成记录</li>
+            <li>在岗但无工资的员工将自动生成零申报记录</li>
+        </ul>
+        <button type="submit" class="btn btn-primary">生成申报数据</button>
+    </div>
+</form>
+
+{% else %}
+<!-- Generated Results -->
+<div class="card">
+    <h3>生成结果</h3>
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-value">{{ stats.income_records }}</div>
+            <div class="stat-label">有收入记录</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-value">{{ stats.zero_records }}</div>
+            <div class="stat-label">零申报记录</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-value">{{ stats.total_records }}</div>
+            <div class="stat-label">总计</div>
+        </div>
+    </div>
+
+    {% if records %}
+    <div class="table-responsive">
+        <table>
+            <thead>
+                <tr>
+                    <th>姓名</th>
+                    <th>身份证号</th>
+                    <th>甲方单位</th>
+                    <th>收入</th>
+                    <th>养老</th>
+                    <th>失业</th>
+                    <th>医疗</th>
+                    <th>公积金</th>
+                    <th>零报</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for mr, emp, unit in records[:30] %}
+                <tr>
+                    <td>{{ emp.name }}</td>
+                    <td>{{ emp.id_card[:6] }}****{{ emp.id_card[-4:] }}</td>
+                    <td>{{ unit.name if unit else "" }}</td>
+                    <td>{{ "%.2f"|format(mr.income) }}</td>
+                    <td>{{ "%.2f"|format(mr.pension) }}</td>
+                    <td>{{ "%.2f"|format(mr.unemployment) }}</td>
+                    <td>{{ "%.2f"|format(mr.medical) }}</td>
+                    <td>{{ "%.2f"|format(mr.housing_fund) }}</td>
+                    <td>{% if mr.is_zero_report %}✓{% endif %}</td>
+                </tr>
+                {% endfor %}
+                {% if records|length > 30 %}
+                <tr><td colspan="9" class="text-muted">... 还有 {{ records|length - 30 }} 条记录</td></tr>
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+    {% endif %}
+</div>
+
+<!-- Export -->
+<div class="card">
+    <h3>步骤 3：导出申报文件</h3>
+    <div class="export-buttons">
+        <a href="/monthly/export/tax-report?year_month={{ year_month }}" class="btn btn-primary">
+            下载综合所得申报表
+        </a>
+        <a href="/monthly/export/personnel?year_month={{ year_month }}" class="btn btn-primary">
+            下载人员信息采集表
+        </a>
+        <a href="/monthly/export/summary?year_month={{ year_month }}" class="btn btn-primary">
+            下载甲方单位汇总表
+        </a>
+    </div>
+    <p class="text-muted" style="margin-top: 1rem;">
+        综合所得申报表和人员信息采集表可直接导入自然人电子税务局扣缴端。
+        单位汇总表用于内部核对。
+    </p>
+</div>
+{% endif %}
+{% endblock %}

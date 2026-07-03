@@ -8,7 +8,42 @@
     <p class="subtitle">查看历史月份申报记录</p>
 </div>
 
+{% if history %}
+<div class="card">
+    <div class="table-responsive">
+        <table>
+            <thead>
+                <tr>
+                    <th>月份</th>
+                    <th>总人数</th>
+                    <th>有收入人数</th>
+                    <th>零申报人数</th>
+                    <th>收入合计</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for h in history %}
+                <tr>
+                    <td>{{ h.year_month }}</td>
+                    <td>{{ h.total_count }}</td>
+                    <td>{{ h.income_count }}</td>
+                    <td>{{ h.zero_count }}</td>
+                    <td>{{ "%.2f"|format(h.total_income) }}</td>
+                    <td>
+                        <a href="/monthly/export/tax-report?year_month={{ h.year_month }}" class="btn btn-small">综合所得</a>
+                        <a href="/monthly/export/personnel?year_month={{ h.year_month }}" class="btn btn-small">人员信息</a>
+                        <a href="/monthly/export/summary?year_month={{ h.year_month }}" class="btn btn-small">单位汇总</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% else %}
 <div class="card">
     <p class="text-muted">暂无历史记录</p>
 </div>
+{% endif %}
 {% endblock %}
